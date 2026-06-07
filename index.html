@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -18,18 +17,27 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* Ajuste para iOS Safari */
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color); color: var(--text-main);
             display: flex; justify-content: center; align-items: flex-start;
-            min-height: 100vh; padding: 20px;
+            min-height: 100vh; 
+            padding: 0; /* Removido o padding para encostar nas bordas */
         }
 
         .container {
-            background-color: var(--card-bg); border-radius: 20px;
-            max-width: 500px; width: 100%; text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden; position: relative; margin-bottom: 40px;
+            background-color: var(--card-bg); 
+            border-radius: 0; /* Aspecto de tela cheia, sem cantos arredondados externos */
+            max-width: 100%; width: 100%; text-align: center;
+            box-shadow: none; /* Removida a sombra pois não está mais flutuando */
+            overflow: hidden; position: relative; margin-bottom: 0;
+            min-height: 100vh; /* Garante que preencha toda a altura da tela */
         }
 
         .content-wrapper {
@@ -678,7 +686,3 @@
     </script>
 </body>
 </html>
-
-
-
-```
