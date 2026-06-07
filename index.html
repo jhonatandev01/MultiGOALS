@@ -1,0 +1,684 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutirão: GOALS no Most Requested Live</title>
+    <style>
+        /* Reset básico e variáveis de cores */
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: #1c1c24;
+            --text-main: #ffffff;
+            --text-sec: #a0a0b0;
+            --accent: #ff0050;
+            --success: #00e676;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color); color: var(--text-main);
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg); border-radius: 20px;
+            max-width: 500px; width: 100%; text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden; position: relative; margin-bottom: 40px;
+        }
+
+        .content-wrapper {
+            padding: 25px 20px 30px 20px; position: relative; z-index: 2;
+        }
+
+        h1 { font-size: 26px; margin-bottom: 10px; font-weight: 900; }
+        h1 span { color: var(--accent); }
+        p.subtitle { color: var(--text-sec); font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
+
+        /* --- Estilos da Arte Vetorial --- */
+        .vector-panel {
+            width: 100%; max-width: 600px; margin: 0 auto 25px auto;
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;
+            background: linear-gradient(145deg, #1e2b22 0%, #0a0a0c 100%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8); position: relative;
+            overflow: hidden; padding-top: 10px;
+        }
+        .vector-panel::before {
+            content: "LISA • REMA • ANITTA"; position: absolute; top: 12px; left: 50%;
+            transform: translateX(-50%); font-size: 11px; letter-spacing: 5px;
+            color: rgba(255, 255, 255, 0.6); font-weight: 900; z-index: 10;
+        }
+        .vector-body { transform-origin: bottom center; animation: breathe 4s ease-in-out infinite alternate; }
+        .vector-body.lisa { animation-delay: 0s; }
+        .vector-body.rema { animation-delay: 0.75s; }
+        .vector-body.anitta { animation-delay: 1.5s; }
+        .vector-eyes { transform-origin: center; animation: blinkVector 4s infinite; }
+        @keyframes breathe { 0% { transform: scaleY(1); } 100% { transform: scaleY(1.02) translateY(-2px); } }
+        @keyframes blinkVector { 0%, 46%, 48%, 100% { transform: scaleY(1); } 47% { transform: scaleY(0.1); } }
+
+        /* --- Estilos do Logo MRL --- */
+        .mrl-logo-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
+        .mrl-logo {
+            background: #000; color: #fff; padding: 15px 20px; border-radius: 8px;
+            text-align: center; font-family: "Arial Black", Impact, sans-serif;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05);
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center; text-transform: uppercase;
+        }
+        .mrl-most { font-size: 34px; line-height: 0.85; font-weight: 900; letter-spacing: 2px; }
+        .mrl-requested { font-size: 14px; line-height: 1; font-weight: 800; font-style: italic; margin: 6px 0; letter-spacing: 1.5px; }
+        .mrl-live { font-size: 38px; line-height: 0.85; font-weight: 900; letter-spacing: 4px; }
+
+        /* --- Estilos do Banner de Sucesso --- */
+        .success-banner {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(29, 185, 84, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 16px; padding: 20px; margin-bottom: 25px;
+            text-align: center; box-shadow: 0 0 25px rgba(255, 215, 0, 0.1);
+        }
+        .success-title {
+            color: #FFD700; font-size: 20px; font-weight: 900; margin-bottom: 12px;
+            text-transform: uppercase; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+        .success-text { font-size: 14px; color: #eee; margin-bottom: 20px; line-height: 1.5; }
+        .history-table-wrapper {
+            background: rgba(0,0,0,0.4); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .history-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
+        .history-table th, .history-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .history-table th { color: #aaa; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; background: rgba(255, 215, 0, 0.05); }
+        .history-table .highlight-row { background: rgba(255, 215, 0, 0.15); font-weight: bold; color: #fff; }
+        .evo-up { color: #00e676; font-weight: 900; }
+        .evo-neu { color: #888; }
+        .rank-number { font-size: 14px; font-weight: 900; font-family: monospace; }
+        .rank-gold { color: #FFD700; font-size: 16px; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+
+        /* --- UI Geral --- */
+        .step-title { font-size: 14px; font-weight: bold; color: var(--text-sec); margin-bottom: 15px; text-transform: uppercase; display: block; }
+        .request-box { background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 15px; color: #e0e0e0; text-align: left; }
+        
+        .btn {
+            display: flex; align-items: center; justify-content: center; width: 100%; padding: 16px; margin-bottom: 12px;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none;
+            color: #fff; transition: all 0.2s ease; gap: 10px;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn:hover { filter: brightness(1.1); }
+        .btn-copy { background-color: var(--accent); margin-bottom: 30px; box-shadow: 0 4px 15px rgba(255, 0, 80, 0.4); }
+        .btn-copy.copied { background-color: var(--success); box-shadow: 0 4px 15px rgba(0, 230, 118, 0.4); }
+        .btn-youtube { background-color: #FF0000; }
+        .btn-tiktok { background-color: #000000; border: 1px solid #333; }
+        .btn-facebook { background-color: #1877F2; }
+        .btn-sms { background-color: #34C759; color: #fff; }
+        .btn-x { background-color: #0f1419; color: #fff; border: 1px solid #333; }
+        .btn-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+
+        /* --- Contagem Regressiva --- */
+        .countdown-box { background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; margin-bottom: 25px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .countdown-title { font-size: 12px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; display: block; font-weight: bold; }
+        .countdown-timer { font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 1px; font-variant-numeric: tabular-nums; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .countdown-box.active { background: rgba(0, 230, 118, 0.1); border-color: var(--success); box-shadow: 0 0 20px rgba(0, 230, 118, 0.2); }
+        .countdown-box.active .countdown-timer { color: var(--success); animation: pulseText 1s infinite alternate; text-shadow: 0 0 15px rgba(0,230,118,0.4); }
+        .countdown-box.active .countdown-title { color: var(--success); }
+        @keyframes pulseText { from { opacity: 0.8; } to { opacity: 1; transform: scale(1.02); } }
+
+        /* --- Modal Inicial --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.show { opacity: 1; pointer-events: all; }
+        .modal-content { background: linear-gradient(145deg, #1c1c24, #2a2a35); padding: 35px 25px; border-radius: 20px; text-align: center; max-width: 90%; width: 400px; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 2px solid var(--accent); box-shadow: 0 0 40px rgba(255, 0, 80, 0.4); }
+        .modal-overlay.show .modal-content { transform: scale(1); }
+        .modal-icon { font-size: 50px; margin-bottom: 15px; animation: bounce 2s infinite; }
+        .modal-title { font-size: 22px; color: #fff; margin-bottom: 15px; font-weight: 900; text-transform: uppercase; }
+        .modal-text { font-size: 16px; color: #ddd; margin-bottom: 25px; line-height: 1.5; }
+        .modal-text strong { color: var(--accent); font-weight: 800; text-decoration: underline; }
+        .btn-modal { background: var(--accent); border: none; padding: 14px; border-radius: 12px; color: #fff; font-weight: bold; font-size: 16px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(255, 0, 80, 0.4); animation: pulseBtn 2s infinite; }
+        @keyframes pulseBtn { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 80, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 0, 80, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 80, 0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-7px); } }
+
+        /* --- Streaming Sections (Spotify e YouTube) --- */
+        .stream-section { background: rgba(255, 255, 255, 0.02); border-radius: 16px; padding: 20px; margin-top: 25px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .spotify-wrapper { width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .streaming-tips { font-size: 13px; color: #aaa; text-align: left; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; }
+        .streaming-tips ul { padding-left: 20px; margin-top: 8px; }
+        .streaming-tips li { margin-bottom: 5px; }
+
+        /* --- Sistema de Abas (Tabs) --- */
+        .tab-container { display: flex; gap: 10px; margin-bottom: 25px; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 14px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+        .tab-btn { flex: 1; padding: 14px 10px; background: transparent; border: none; color: var(--text-sec); font-weight: bold; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-size: 14px; }
+        .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 4px 15px rgba(255,0,80,0.4); }
+        .tab-content { display: none; animation: fadeInTab 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Simulador Kworb Realista (Aba 2) --- */
+        .goals-title-neon { font-size: 26px; color: #1DB954; text-shadow: 0 0 15px rgba(29, 185, 84, 0.6); margin-bottom: 10px; font-weight: 900; text-transform: uppercase; }
+        .kworb-wrapper { background: #1a1a1a; border-radius: 12px; padding: 15px; overflow-x: auto; margin-top: 20px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        .kworb-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #333; margin-bottom: 15px; }
+        .kworb-table { width: 100%; border-collapse: collapse; font-size: 13px; color: #ccc; text-align: left; white-space: nowrap; }
+        .kworb-table th { background: #252525; color: #fff; padding: 12px 10px; font-size: 11px; border-bottom: 2px solid #444; text-transform: uppercase; }
+        .kworb-table td { padding: 12px 10px; border-bottom: 1px solid #333; }
+        .kworb-table tr:nth-child(even) { background-color: #222; }
+        .kworb-table .up { color: #00e676; }
+        .kworb-table .down { color: #ff3b30; }
+        .kworb-table .neutral { color: #888; }
+        .kworb-table .goals-row { background-color: rgba(255, 59, 48, 0.15) !important; border-left: 4px solid #ff3b30; }
+        .kworb-table .goals-row td { color: #fff; }
+        .status-badge { background: #ff3b30; color: #fff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+
+        /* --- Desafio e Ranking Fãs --- */
+        .challenge-box { background: rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; margin-top: 25px; border: 1px solid var(--accent); }
+        .progress-bar { width: 100%; background: #333; border-radius: 10px; height: 15px; margin: 15px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s ease; box-shadow: 0 0 10px var(--success); }
+        .ranking-list { list-style: none; padding: 0; margin-top: 15px; text-align: left; max-height: 250px; overflow-y: auto; }
+        .ranking-item { display: flex; justify-content: space-between; padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; align-items: center; }
+        .ranking-item:nth-child(1) { color: gold; font-weight: bold; font-size: 16px; background: rgba(255, 215, 0, 0.1); border-radius: 8px;}
+        .ranking-item:nth-child(2) { color: silver; font-weight: bold; font-size: 15px; background: rgba(192, 192, 192, 0.1); border-radius: 8px;}
+        .ranking-item:nth-child(3) { color: #cd7f32; font-weight: bold; font-size: 15px; background: rgba(205, 127, 50, 0.1); border-radius: 8px;}
+        .meta-badge { background: var(--accent); color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; }
+        .pop-anim { display: inline-block; animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); color: var(--success); } 100% { transform: scale(1); } }
+        .emoji-rain { position: fixed; top: -50px; font-size: 35px; z-index: 10000; animation: fall linear forwards; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
+        #clipboard-temp { position: absolute; left: -9999px; top: -9999px; }
+    </style>
+</head>
+<body>
+
+    <!-- Modal Boas-Vindas -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal-content">
+            <div class="modal-icon">🚨</div>
+            <h2 class="modal-title">Atenção, Fã!</h2>
+            <p class="modal-text">
+                Assim que a contagem terminar, copie a mensagem e comente nos <strong>links oficiais</strong>!<br><br>
+                Prepare-se para floodar e colocar GOALS no topo! 🚀
+            </p>
+            <button class="btn-modal" onclick="fecharModal()">ENTENDI, VAMOS LÁ!</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Arte Vetorial do Trio -->
+        <div class="vector-panel">
+            <svg viewBox="0 0 800 280" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+                <!-- Luz de Fundo -->
+                <circle cx="400" cy="100" r="250" fill="rgba(255,255,255,0.05)" filter="blur(20px)"/>
+
+                <!-- LISA -->
+                <g transform="translate(40, 0)">
+                    <g class="vector-body lisa">
+                        <path d="M 50 100 Q 20 180 30 280 L 190 280 Q 200 180 170 100 Z" fill="#2d170f"/>
+                        <path d="M -10 280 L 20 200 Q 60 170 110 180 Q 160 170 200 200 L 230 280 Z" fill="#3a2318"/>
+                        <path d="M 10 280 L 50 200 L 60 280 Z" fill="#25150e"/>
+                        <path d="M 210 280 L 170 200 L 160 280 Z" fill="#25150e"/>
+                        <path d="M 60 280 L 60 220 Q 110 240 160 220 L 160 280 Z" fill="#111"/>
+                        <path d="M 60 220 Q 110 240 160 220 L 155 235 Q 110 255 65 235 Z" fill="#8b5a2b"/>
+                        <path d="M 90 140 L 90 190 Q 110 200 130 190 L 130 140 Z" fill="#eabf9f"/>
+                        <path d="M 90 170 Q 110 190 130 170" fill="none" stroke="#d4af37" stroke-width="1.5"/>
+                        <polygon points="110,182 105,188 110,194 115,188" fill="#d4af37"/>
+                        <ellipse cx="110" cy="130" rx="35" ry="45" fill="#f5d6c6"/>
+                        <path d="M 75 130 C 75 190 145 190 145 130" fill="#f5d6c6"/>
+                        <ellipse cx="85" cy="145" rx="10" ry="6" fill="#e89f88" opacity="0.4"/>
+                        <ellipse cx="135" cy="145" rx="10" ry="6" fill="#e89f88" opacity="0.4"/>
+                        <g class="vector-eyes" style="transform-origin: 110px 125px;">
+                            <path d="M 82 125 Q 92 118 100 125" fill="none" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 82 125 L 78 122" fill="none" stroke="#222" stroke-width="2"/>
+                            <ellipse cx="91" cy="127" rx="4" ry="4" fill="#3a2318"/>
+                            <circle cx="92" cy="126" r="1.5" fill="#fff"/>
+                            <path d="M 120 125 Q 128 118 138 125" fill="none" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 138 125 L 142 122" fill="none" stroke="#222" stroke-width="2"/>
+                            <ellipse cx="129" cy="127" rx="4" ry="4" fill="#3a2318"/>
+                            <circle cx="128" cy="126" r="1.5" fill="#fff"/>
+                        </g>
+                        <path d="M 110 135 L 108 145 L 112 145" fill="none" stroke="#dca896" stroke-width="1.5"/>
+                        <path d="M 98 160 Q 110 155 122 160 Q 110 166 98 160" fill="#c9664a"/>
+                        <path d="M 102 160 Q 110 163 118 160" fill="none" stroke="#8a3721" stroke-width="1"/>
+                        <path d="M 40 100 Q 60 40 110 40 Q 160 40 180 100 Q 190 150 180 200 L 165 200 Q 175 130 160 100 Q 140 130 110 80 Q 80 130 60 100 Q 45 130 55 200 L 40 200 Q 30 150 40 100 Z" fill="#4a2e1b"/>
+                        <path d="M 60 100 Q 110 115 160 100 L 150 50 Q 110 40 70 50 Z" fill="#3a2318"/>
+                        <path d="M 75 80 L 85 70 M 100 85 L 115 70 M 130 85 L 145 70" fill="none" stroke="#684227" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+                </g>
+
+                <!-- REMA -->
+                <g transform="translate(75, 0)">
+                    <g class="vector-body rema">
+                        <path d="M 240 280 L 270 190 Q 325 170 380 190 L 410 280 Z" fill="#1c1c1e"/>
+                        <path d="M 240 280 L 270 190 L 280 280 Z" fill="#111"/>
+                        <path d="M 410 280 L 380 190 L 370 280 Z" fill="#111"/>
+                        <path d="M 285 195 L 285 280 L 365 280 L 365 195 Q 325 210 285 195 Z" fill="#e8ba31"/>
+                        <circle cx="325" cy="245" r="20" fill="#222"/>
+                        <path d="M 315 245 Q 325 255 335 245" fill="none" stroke="#e8ba31" stroke-width="2"/>
+                        <path d="M 305 140 L 305 190 Q 325 195 345 190 L 345 140 Z" fill="#4a2a1b"/>
+                        <path d="M 290 185 Q 325 230 360 185" fill="none" stroke="#d4af37" stroke-width="4"/>
+                        <circle cx="325" cy="220" r="14" fill="#d4af37"/>
+                        <circle cx="325" cy="220" r="8" fill="none" stroke="#f4d36e" stroke-width="2"/>
+                        <path d="M 320 220 L 330 220 M 325 215 L 325 225" stroke="#fff" stroke-width="2"/>
+                        <ellipse cx="325" cy="130" rx="33" ry="46" fill="#5e3624"/>
+                        <path d="M 292 130 C 292 188 358 188 358 130" fill="#5e3624"/>
+                        <ellipse cx="305" cy="145" rx="8" ry="4" fill="#3a1e12" opacity="0.6"/>
+                        <ellipse cx="345" cy="145" rx="8" ry="4" fill="#3a1e12" opacity="0.6"/>
+                        <g class="vector-eyes" style="transform-origin: 325px 125px;">
+                            <path d="M 300 120 Q 308 116 315 120" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+                            <ellipse cx="308" cy="122" rx="3.5" ry="3.5" fill="#111"/>
+                            <circle cx="307" cy="121" r="1.5" fill="#fff"/>
+                            <path d="M 335 120 Q 343 116 350 120" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+                            <ellipse cx="342" cy="122" rx="3.5" ry="3.5" fill="#111"/>
+                            <circle cx="341" cy="121" r="1.5" fill="#fff"/>
+                        </g>
+                        <path d="M 325 128 L 321 142 L 329 142" fill="none" stroke="#361a0f" stroke-width="2.5"/>
+                        <path d="M 316 142 Q 325 146 334 142" fill="none" stroke="#361a0f" stroke-width="1.5"/>
+                        <path d="M 312 155 Q 325 150 338 155 Q 325 163 312 155" fill="#361a0f"/>
+                        <path d="M 314 155 Q 325 158 336 155" fill="none" stroke="#1c0d08" stroke-width="1.5"/>
+                        <circle cx="292" cy="135" r="3" fill="#d4af37"/>
+                        <circle cx="358" cy="135" r="3" fill="#d4af37"/>
+                        <path d="M 290 95 Q 325 45 360 95 Q 365 80 340 70 Q 325 60 300 70 Q 285 80 290 95 Z" fill="#111"/>
+                        <path d="M 285 95 Q 275 140 288 175" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M 365 95 Q 375 140 362 175" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M 298 90 Q 285 130 302 165" fill="none" stroke="#1c1c1c" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M 352 90 Q 365 130 348 165" fill="none" stroke="#1c1c1c" stroke-width="6" stroke-linecap="round"/>
+                    </g>
+                </g>
+
+                <!-- ANITTA -->
+                <g transform="translate(320, 0)">
+                    <g class="vector-body anitta">
+                        <path d="M 280 100 Q 240 150 250 280 L 420 280 Q 430 150 390 100 Z" fill="#1c110c"/>
+                        <path d="M 370 200 Q 430 180 460 140 Q 480 110 450 80 Q 430 70 410 90" fill="#b07d5b"/>
+                        <path d="M 445 125 L 465 110 M 440 135 L 460 120" fill="none" stroke="#FFD700" stroke-width="3"/>
+                        <path d="M 280 280 L 290 190 Q 330 180 370 200 L 390 280 Z" fill="#b07d5b"/>
+                        <path d="M 290 190 Q 330 220 370 200 L 370 250 Q 330 260 290 250 Z" fill="#111"/>
+                        <path d="M 290 250 Q 330 265 370 250 L 365 255 Q 330 270 295 255 Z" fill="#FFD700"/>
+                        <g stroke="#ccc" stroke-width="2" fill="#111">
+                            <circle cx="305" cy="215" r="4"/> <circle cx="325" cy="215" r="4"/>
+                            <circle cx="345" cy="215" r="4"/> <circle cx="360" cy="210" r="4"/>
+                            <circle cx="300" cy="235" r="4"/> <circle cx="320" cy="240" r="4"/>
+                            <circle cx="340" cy="240" r="4"/> <circle cx="360" cy="230" r="4"/>
+                        </g>
+                        <!-- BOLA FIFA -->
+                        <g transform="translate(370, 45)">
+                            <circle cx="45" cy="45" r="42" fill="#f0f0f0" filter="drop-shadow(-5px 5px 5px rgba(0,0,0,0.5))"/>
+                            <path d="M 10 30 Q 45 10 70 40 Q 60 70 30 70 Q 10 50 10 30 Z" fill="none" stroke="#1c4596" stroke-width="8"/>
+                            <path d="M 70 40 Q 90 60 60 80 Q 40 70 30 70" fill="none" stroke="#e34234" stroke-width="8"/>
+                            <path d="M 10 30 Q 5 60 20 80 Q 40 90 60 80" fill="none" stroke="#008a45" stroke-width="6"/>
+                            <circle cx="45" cy="45" r="12" fill="none" stroke="#111" stroke-width="2"/>
+                        </g>
+                        <path d="M 315 140 L 315 190 Q 330 195 345 190 L 345 140 Z" fill="#a06e4e"/>
+                        <ellipse cx="330" cy="130" rx="32" ry="42" fill="#c68c66"/>
+                        <path d="M 298 130 C 298 185 362 185 362 130" fill="#c68c66"/>
+                        <ellipse cx="310" cy="145" rx="8" ry="5" fill="#a05b45" opacity="0.4"/>
+                        <ellipse cx="350" cy="145" rx="8" ry="5" fill="#a05b45" opacity="0.4"/>
+                        <g class="vector-eyes" style="transform-origin: 330px 125px;">
+                            <path d="M 305 122 Q 312 118 320 125" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M 305 122 L 300 118" fill="none" stroke="#111" stroke-width="2.5"/>
+                            <ellipse cx="312" cy="126" rx="4" ry="4" fill="#2a1610"/>
+                            <circle cx="311" cy="125" r="1.5" fill="#fff"/>
+                            <path d="M 340 125 Q 348 118 355 122" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M 355 122 L 360 118" fill="none" stroke="#111" stroke-width="2.5"/>
+                            <ellipse cx="348" cy="126" rx="4" ry="4" fill="#2a1610"/>
+                            <circle cx="349" cy="125" r="1.5" fill="#fff"/>
+                        </g>
+                        <path d="M 330 135 L 328 145 L 332 145" fill="none" stroke="#9e694a" stroke-width="2"/>
+                        <path d="M 318 160 Q 330 154 342 160 Q 330 168 318 160" fill="#8f4a38"/>
+                        <path d="M 322 160 Q 330 162 338 160" fill="none" stroke="#4a2115" stroke-width="1.5"/>
+                        <path d="M 280 100 Q 310 40 330 40 Q 360 40 380 100 Q 390 150 370 200 Q 380 150 360 100 Q 340 60 330 60 Q 320 60 300 100 Q 280 150 290 200 Q 270 150 280 100 Z" fill="#3e2723"/>
+                        <path d="M 290 100 Q 280 140 300 180 M 370 100 Q 380 140 360 180" fill="none" stroke="#5d4037" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <div class="content-wrapper">
+            
+            <!-- Abas de Navegação -->
+            <div class="tab-container">
+                <button class="tab-btn active" onclick="abrirAba(event, 'tab-mutirao')">📻 Mutirão Rádio</button>
+                <button class="tab-btn" onclick="abrirAba(event, 'tab-spotify')">🎧 Top 200 Global</button>
+            </div>
+
+            <!-- ================= ABA 1: MUTIRÃO MRL ================= -->
+            <div id="tab-mutirao" class="tab-content active">
+
+                <!-- Logo MRL CSS -->
+                <div class="mrl-logo-wrapper">
+                    <div class="mrl-logo">
+                        <div class="mrl-most">MOST</div>
+                        <div class="mrl-requested">REQUESTED</div>
+                        <div class="mrl-live">LIVE</div>
+                    </div>
+                </div>
+
+                <h1>Mutirão <span>GOALS</span> 🌍</h1>
+                <p class="subtitle">Ajude Anitta, Lisa e Rema a dominarem o Most Requested Live!</p>
+
+                <!-- Banner de Sucesso (Top 4) -->
+                <div class="success-banner">
+                    <h2 class="success-title">🎉 OBRIGADO, FÃS! TOP 4!</h2>
+                    <p class="success-text">
+                        Graças ao engajamento surreal de vocês, conseguimos uma subida fantástica! Rumo ao #1!
+                    </p>
+                    <h3 style="font-size: 13px; color: #FFD700; text-transform: uppercase; margin-bottom: 10px; text-align: left; letter-spacing: 1px;">📈 Histórico de Ranking (MRL)</h3>
+                    <div class="history-table-wrapper">
+                        <table class="history-table">
+                            <thead>
+                                <tr><th>Período</th><th>Posição</th><th>Evolução</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Dia 1</td><td class="rank-number">#9</td><td class="evo-neu">—</td><td>Estreia nas 10+</td></tr>
+                                <tr><td>Dia 2</td><td class="rank-number">#5</td><td class="evo-up">+4</td><td>Crescimento!</td></tr>
+                                <tr class="highlight-row"><td>Dia 3</td><td class="rank-number rank-gold">#4</td><td class="evo-up">+1</td><td>Novo pico! 🔥</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Contagem Regressiva -->
+                <div class="countdown-box" id="countdown-box">
+                    <span class="countdown-title" id="countdown-title">Início do próximo mutirão em:</span>
+                    <div class="countdown-timer" id="countdown-timer">Carregando...</div>
+                </div>
+
+                <span class="step-title">Passo 1: Copie a mensagem</span>
+                <div class="request-box" id="texto-pedido">
+                    Hey @OnAirRomeo! We would love to hear 'GOALS' by Anitta, Lisa, and Rema on #MostRequestedLive tonight! Thank you! 🎵💖
+                </div>
+                <button class="btn btn-copy" id="btnCopiar" onclick="copiarTexto()">📋 Copiar Texto do Pedido</button>
+
+                <hr style="border-color: rgba(255,255,255,0.1); margin: 25px 0;">
+
+                <span class="step-title">Passo 2: Envie nas redes do programa</span>
+                <a href="https://x.com/mostrequestlive/status/2063395732376199506?s=46" target="_blank" class="btn btn-x">🐦 Comentar no Twitter/X (Post Oficial)</a>
+                <a href="https://www.instagram.com/reel/DZQxmNmAc7Z/?igsh=N2x5YXFhbXN4NDRn" target="_blank" class="btn btn-instagram">📸 Comentar no Instagram (Reel Oficial)</a>
+                <a href="https://m.facebook.com/story.php?story_fbid=pfbid0XMvJAWkgqk1h2oKPpwGRyCTEbjQM9HnxJMiSTvpHQTNvKMQysRRNJM2Wikt1tP1Hl&id=100064539650326&mibextid=wwXIfr" target="_blank" class="btn btn-facebook">💙 Comentar no Facebook (Post Oficial)</a>
+                <a href="https://vt.tiktok.com/ZSQYMxtXd/" target="_blank" class="btn btn-tiktok">📱 Comentar no TikTok (Vídeo Oficial)</a>
+                <a href="https://youtube.com/shorts/_aSfn7YGgQY?si=r4MI8ZLawKHxfIWD" target="_blank" class="btn btn-youtube">📺 Comentar no YouTube (Short Oficial)</a>
+                <a href="sms:71021" class="btn btn-sms">💬 Enviar SMS (Apenas EUA)</a>
+
+                <!-- DICAS E PLAYER DO SPOTIFY (Recuperado) -->
+                <div class="stream-section">
+                    <span class="step-title" style="color: #1DB954; font-size: 16px;">🎧 Dê stream no Spotify</span>
+                    <div class="spotify-wrapper">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3hdGyxmW0eNskNwTwmXOIQ?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                    <div class="streaming-tips">
+                        <strong style="color: #1DB954;">⚠️ Como validar seu stream:</strong>
+                        <ul>
+                            <li><strong>Sem Loop:</strong> Não deixe a música repetindo.</li>
+                            <li><strong>Intercale:</strong> Ouça 2 a 3 músicas de outros antes de tocar de novo.</li>
+                            <li><strong>Não Mute:</strong> Abaixe o celular, mas não o app.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DICAS E LINK DO YOUTUBE (Recuperado) -->
+                <div class="stream-section">
+                    <span class="step-title" style="color: #FF0000; font-size: 16px;">🎬 Assista no YouTube</span>
+                    <a href="https://youtu.be/safzyuZNCGI?si=lxBbDeQtjbfCN-Kh" target="_blank" class="btn btn-youtube" style="margin-bottom: 15px;">▶️ Abrir Clipe Oficial</a>
+                    <div class="streaming-tips">
+                        <strong style="color: #FF0000;">⚠️ Regras de View:</strong>
+                        <ul>
+                            <li><strong>Intercale:</strong> Assista outros vídeos curtos entre as exibições.</li>
+                            <li><strong>Sem Modo Anônimo:</strong> Esteja logado na sua conta normal.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DESAFIO DE METAS E RANKING (Único no site) -->
+                <div class="challenge-box">
+                    <span class="step-title" style="color: var(--accent); font-size: 18px;">🏆 Desafio: 10 Comentários</span>
+                    <p style="font-size: 13px; color: #ccc; margin-bottom: 15px;">A cada comentário feito nas redes sociais, clique no botão para registrar. A cada 10, você sobe no Ranking!</p>
+                    
+                    <button class="btn" style="background: #333; border: 1px solid #555; margin-bottom: 5px;" onclick="registrarComentario()">➕ Concluí mais 1 Comentário!</button>
+                    
+                    <div style="font-weight: bold; margin-top: 10px; font-size: 15px;" id="contador-texto">Progresso: 0 / 10</div>
+                    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+                    
+                    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+                    
+                    <h3 style="font-size: 16px; margin-bottom: 10px; text-transform: uppercase;">👑 Top Fãs Mutirão GOALS</h3>
+                    <ul class="ranking-list" id="ranking-list">
+                        <li class="ranking-item" style="justify-content: center; color: #888;">Carregando ranking global...</li>
+                    </ul>
+                </div>
+
+            </div> <!-- Fim tab-mutirao -->
+
+            <!-- ================= ABA 2: SPOTIFY GLOBAL ================= -->
+            <div id="tab-spotify" class="tab-content">
+                
+                <h2 class="goals-title-neon">GOALS NO TOP GLOBAL</h2>
+                <p class="subtitle" style="margin-bottom: 25px;">Acompanhe a nossa meta diária para colocar a música de volta no chart mundial do Spotify!</p>
+
+                <!-- Player do Spotify duplicado para conveniência nesta aba -->
+                <div class="spotify-wrapper">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3hdGyxmW0eNskNwTwmXOIQ?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+
+                <!-- Tabela Kworb TRACKER REALISTA -->
+                <div class="kworb-wrapper">
+                    <div class="kworb-header">
+                        <div>
+                            <strong style="color: #fff; font-size: 14px;">Spotify Global Daily</strong><br>
+                            <span style="color: #888; font-size: 11px;">Atualizado em: <span id="kworb-date">--/--/----</span></span>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="status-badge">STATUS: OUT</span>
+                        </div>
+                    </div>
+
+                    <table class="kworb-table">
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>P+</th>
+                                <th>Artista e Música</th>
+                                <th>Streams</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td class="up">+2</td><td>Michael Jackson - Billie Jean</td><td>5,516,760</td></tr>
+                            <tr><td>2</td><td class="neutral">=</td><td>Ariana Grande - hate that i made you love me</td><td>5,335,228</td></tr>
+                            <tr><td>3</td><td class="up">+1</td><td>Justin Bieber - Beauty And A Beat (w/ Nicki Minaj)</td><td>5,198,728</td></tr>
+                            <tr><td>...</td><td class="neutral"></td><td>...</td><td>...</td></tr>
+                            <tr><td>199</td><td class="down">-5</td><td>Kanye West - Flashing Lights (w/ Dwele)</td><td>1,222,978</td></tr>
+                            <tr><td>200</td><td class="neutral">RE</td><td>The Chainsmokers - Closer (w/ Halsey)</td><td>1,220,257</td></tr>
+                            
+                            <!-- Linha Destacada do TRACKER de GOALS (Mostrando que está OUT) -->
+                            <tr class="goals-row">
+                                <td style="font-weight: bold;">OUT</td>
+                                <td class="neutral">—</td>
+                                <td><strong>Anitta, LISA, Rema - GOALS</strong></td>
+                                <td style="font-weight: bold; color: #ff3b30;">Meta: ~1.22M+</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center; border: 1px dashed #555;">
+                        <p style="font-size: 13px; color: #ddd; margin-bottom: 5px;">Precisamos fazer com que a música atinja cerca de <strong>1.220.257 streams</strong> diários limpos para ela conseguir entrar no Top 200 Global de novo.</p>
+                        <p style="font-size: 15px; font-weight: bold; color: #1DB954; margin-top: 10px;">Faltam +/- 1.22M streams! Dê play!</p>
+                    </div>
+                </div>
+
+            </div> <!-- Fim tab-spotify -->
+
+        </div>
+    </div>
+
+    <!-- Textarea para cópia -->
+    <textarea id="clipboard-temp" aria-hidden="true"></textarea>
+
+    <!-- Scripts e Lógicas -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mutirao-goals';
+        let app, auth, db, currentUser = null;
+        let hasFirebase = false;
+
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                const config = JSON.parse(__firebase_config);
+                if (Object.keys(config).length > 0) {
+                    app = initializeApp(config); auth = getAuth(app); db = getFirestore(app); hasFirebase = true;
+                }
+            }
+        } catch(e) {}
+
+        let comentariosFeitos = 0;
+        let userName = localStorage.getItem('mrl_username') || "";
+        const emojisList = ['✨', '🔥', '💖', '🚀', '👑', '🌟', '🎧', '💃', '💫', '🎶', '📻', '🌎'];
+
+        window.copiarTexto = function() {
+            let randomEmojis = "";
+            const numEmojis = Math.floor(Math.random() * 2) + 3; 
+            for(let i=0; i<numEmojis; i++) randomEmojis += emojisList[Math.floor(Math.random() * emojisList.length)];
+            const uniqueHash = Math.random().toString(36).substring(2, 6);
+            
+            const textoAntiSpam = `Hey @OnAirRomeo! We would love to hear 'GOALS' by Anitta, Lisa, and Rema on #MostRequestedLive tonight! Thank you! ${randomEmojis} [${uniqueHash}]`;
+            
+            document.getElementById('texto-pedido').innerText = textoAntiSpam;
+            const textAreaTemp = document.getElementById('clipboard-temp');
+            textAreaTemp.value = textoAntiSpam;
+            textAreaTemp.select(); textAreaTemp.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                const btn = document.getElementById('btnCopiar');
+                btn.innerHTML = "✅ Copiado! (Texto Inédito)"; btn.classList.add('copied');
+                setTimeout(() => { btn.innerHTML = "📋 Copiar Novo Texto (Anti-Spam)"; btn.classList.remove('copied'); }, 3000);
+            } catch (err) { alert('Copie o texto manualmente!'); }
+            window.getSelection().removeAllRanges();
+        };
+
+        window.registrarComentario = function() {
+            if (comentariosFeitos < 10) {
+                comentariosFeitos++;
+                const contador = document.getElementById('contador-texto');
+                contador.innerText = `Progresso: ${comentariosFeitos} / 10`;
+                contador.classList.remove('pop-anim'); void contador.offsetWidth; contador.classList.add('pop-anim');
+                document.getElementById('progress-fill').style.width = `${(comentariosFeitos / 10) * 100}%`;
+                if (comentariosFeitos === 10) setTimeout(() => { window.cumprirDesafio(); }, 400); 
+            }
+        };
+
+        function dispararConfetes() {
+            const emojis = ['🎉', '💖', '🔥', '🚀', '🏆'];
+            for(let i=0; i<30; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div'); el.className = 'emoji-rain';
+                    el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    el.style.left = Math.random() * 100 + 'vw'; el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(el); setTimeout(() => el.remove(), 4000);
+                }, i * 80);
+            }
+        }
+
+        window.cumprirDesafio = async function() {
+            if (!userName) {
+                userName = prompt("🏆 VOCÊ BATEU A META DE 10 COMENTÁRIOS!\nQual o seu @ do Twitter, Instagram ou TikTok?\n(Insira apenas UM para entrar no Ranking!)");
+                if (!userName) {
+                    comentariosFeitos = 9; document.getElementById('contador-texto').innerText = `Progresso: 9 / 10`;
+                    document.getElementById('progress-fill').style.width = `90%`; return; 
+                }
+                localStorage.setItem('mrl_username', userName);
+            }
+
+            dispararConfetes();
+            if (hasFirebase && currentUser && db) {
+                try {
+                    const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'ranking', currentUser.uid);
+                    const docSnap = await getDoc(userDocRef);
+                    let currentTotal = docSnap.exists() ? docSnap.data().challengesCompleted || 0 : 0;
+                    await setDoc(userDocRef, { username: userName, challengesCompleted: currentTotal + 1, lastUpdated: Date.now() }, { merge: true });
+                } catch (e) { salvarRankingLocal(userName); }
+            } else { salvarRankingLocal(userName); }
+
+            setTimeout(() => {
+                alert(`🎉 SUCESSO, ${userName}! Mais uma meta alcançada!`);
+                comentariosFeitos = 0; document.getElementById('contador-texto').innerText = `Progresso: 0 / 10`;
+                document.getElementById('progress-fill').style.width = `0%`;
+            }, 600);
+        };
+
+        function salvarRankingLocal(nomeUsuario) {
+            let ranking = JSON.parse(localStorage.getItem('mrl_ranking') || '[]');
+            let userIndex = ranking.findIndex(u => u.username === nomeUsuario);
+            if (userIndex > -1) ranking[userIndex].challengesCompleted += 1;
+            else ranking.push({ username: nomeUsuario, challengesCompleted: 1 });
+            ranking.sort((a,b) => b.challengesCompleted - a.challengesCompleted);
+            localStorage.setItem('mrl_ranking', JSON.stringify(ranking)); renderizarRanking(ranking);
+        }
+
+        function renderizarRanking(users) {
+            const listHtml = document.getElementById('ranking-list'); listHtml.innerHTML = '';
+            if (users.length === 0) return listHtml.innerHTML = '<li class="ranking-item" style="justify-content: center; color: #888;">Seja o 1º!</li>';
+            users.slice(0, 20).forEach((u, index) => {
+                let rank = index + 1; let prefix = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `<span>${rank}º</span>`;
+                listHtml.innerHTML += `<li class="ranking-item"><div style="display:flex; align-items:center; gap: 8px;">${prefix} <span>${u.username || 'Anônimo'}</span></div><span class="meta-badge">${u.challengesCompleted} Metas</span></li>`;
+            });
+        }
+
+        window.abrirAba = function(evt, nomeAba) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; tabcontent[i].classList.remove("active"); }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) tablinks[i].classList.remove("active");
+            document.getElementById(nomeAba).style.display = "block";
+            setTimeout(() => { document.getElementById(nomeAba).classList.add("active"); }, 10);
+            evt.currentTarget.classList.add("active");
+        }
+
+        window.onload = function() {
+            document.getElementById('welcomeModal').classList.add('show');
+            
+            // Lógica Atualização de Data Kworb (Mostra data do dia anterior por padrão de charts)
+            const dateObj = new Date();
+            dateObj.setDate(dateObj.getDate() - 1);
+            document.getElementById('kworb-date').innerText = dateObj.toLocaleDateString('pt-BR');
+
+            // Lógica Contagem Regressiva
+            function atualizarContador() {
+                const agoraBRT = new Date(new Date().getTime() + (new Date().getTimezoneOffset() * 60000) + (3600000 * -3));
+                const diaDaSemana = agoraBRT.getDay(), hora = agoraBRT.getHours();
+                const box = document.getElementById('countdown-box'), title = document.getElementById('countdown-title'), timer = document.getElementById('countdown-timer');
+                if (diaDaSemana === 6 && hora >= 19 && hora < 24) { box.classList.add('active'); title.innerText = "🔥 O MUTIRÃO ESTÁ ROLANDO! 🔥"; timer.innerText = "VÁ PEDIR AGORA!"; return; }
+                box.classList.remove('active'); title.innerText = "Início do próximo mutirão em (BRT):";
+                let diasParaSabado = (6 - diaDaSemana + 7) % 7; if (diaDaSemana === 6 && hora < 19) diasParaSabado = 0;
+                let alvoBRT = new Date(agoraBRT); alvoBRT.setDate(alvoBRT.getDate() + diasParaSabado); alvoBRT.setHours(19, 0, 0, 0);
+                const diffTempo = alvoBRT - agoraBRT;
+                const d = Math.floor(diffTempo / 86400000), h = Math.floor((diffTempo % 86400000) / 3600000), m = Math.floor((diffTempo % 3600000) / 60000), s = Math.floor((diffTempo % 60000) / 1000);
+                timer.innerText = d > 0 ? `${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s` : `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+            }
+            atualizarContador(); setInterval(atualizarContador, 1000);
+
+            // Inicialização do Ranking
+            if (!hasFirebase) {
+                let ranking = JSON.parse(localStorage.getItem('mrl_ranking') || '[{"username":"@anittafan_br","challengesCompleted":5},{"username":"@lisamc_ofc","challengesCompleted":3}]');
+                localStorage.setItem('mrl_ranking', JSON.stringify(ranking)); renderizarRanking(ranking); return;
+            }
+            (async () => {
+                try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); } catch(e){}
+            })();
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                if (user && db) {
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'ranking'), (snapshot) => {
+                        let users = []; snapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
+                        users.sort((a, b) => b.challengesCompleted - a.challengesCompleted); renderizarRanking(users);
+                    }, () => { salvarRankingLocal('teste'); });
+                }
+            });
+        };
+        window.fecharModal = function() { document.getElementById('welcomeModal').classList.remove('show'); };
+    </script>
+</body>
+</html>
+
+
+
+```
