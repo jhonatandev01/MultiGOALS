@@ -28,16 +28,16 @@
             background-color: var(--bg-color); color: var(--text-main);
             display: flex; justify-content: center; align-items: flex-start;
             min-height: 100vh; 
-            padding: 0; /* Removido o padding para encostar nas bordas */
+            padding: 0; 
         }
 
         .container {
             background-color: var(--card-bg); 
-            border-radius: 0; /* Aspecto de tela cheia, sem cantos arredondados externos */
+            border-radius: 0; 
             max-width: 100%; width: 100%; text-align: center;
-            box-shadow: none; /* Removida a sombra pois não está mais flutuando */
+            box-shadow: none; 
             overflow: hidden; position: relative; margin-bottom: 0;
-            min-height: 100vh; /* Garante que preencha toda a altura da tela */
+            min-height: 100vh; 
         }
 
         .content-wrapper {
@@ -191,20 +191,39 @@
         .emoji-rain { position: fixed; top: -50px; font-size: 35px; z-index: 10000; animation: fall linear forwards; pointer-events: none; }
         @keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
         #clipboard-temp { position: absolute; left: -9999px; top: -9999px; }
+
+        /* --- Estilos do Seletor de Idioma --- */
+        .lang-switcher {
+            position: absolute; top: 15px; right: 15px; z-index: 100;
+            background: rgba(0,0,0,0.6); padding: 5px; border-radius: 20px;
+            display: flex; gap: 5px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .lang-btn {
+            background: transparent; border: none; color: #aaa; font-size: 12px;
+            font-weight: bold; cursor: pointer; padding: 6px 12px; border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        .lang-btn.active { background: var(--accent); color: #fff; box-shadow: 0 0 10px rgba(255,0,80,0.5); }
     </style>
 </head>
 <body>
+
+    <!-- Seletor de Idioma -->
+    <div class="lang-switcher">
+        <button class="lang-btn active" id="btn-pt" onclick="mudarIdioma('pt')">PT</button>
+        <button class="lang-btn" id="btn-en" onclick="mudarIdioma('en')">EN</button>
+    </div>
 
     <!-- Modal Boas-Vindas -->
     <div class="modal-overlay" id="welcomeModal">
         <div class="modal-content">
             <div class="modal-icon">🚨</div>
-            <h2 class="modal-title">Atenção, Fã!</h2>
-            <p class="modal-text">
+            <h2 class="modal-title" data-i18n="modal-title">Atenção, Fã!</h2>
+            <p class="modal-text" data-i18n="modal-text">
                 Assim que a contagem terminar, copie a mensagem e comente nos <strong>links oficiais</strong>!<br><br>
                 Prepare-se para floodar e colocar GOALS no topo! 🚀
             </p>
-            <button class="btn-modal" onclick="fecharModal()">ENTENDI, VAMOS LÁ!</button>
+            <button class="btn-modal" onclick="fecharModal()" data-i18n="modal-btn">ENTENDI, VAMOS LÁ!</button>
         </div>
     </div>
 
@@ -342,8 +361,8 @@
             
             <!-- Abas de Navegação -->
             <div class="tab-container">
-                <button class="tab-btn active" onclick="abrirAba(event, 'tab-mutirao')">📻 Mutirão Rádio</button>
-                <button class="tab-btn" onclick="abrirAba(event, 'tab-spotify')">🎧 Top 200 Global</button>
+                <button class="tab-btn active" onclick="abrirAba(event, 'tab-mutirao')" data-i18n="tab-radio">📻 Mutirão Rádio</button>
+                <button class="tab-btn" onclick="abrirAba(event, 'tab-spotify')" data-i18n="tab-spotify">🎧 Top 200 Global</button>
             </div>
 
             <!-- ================= ABA 1: MUTIRÃO MRL ================= -->
@@ -358,25 +377,25 @@
                     </div>
                 </div>
 
-                <h1>Mutirão <span>GOALS</span> 🌍</h1>
-                <p class="subtitle">Ajude Anitta, Lisa e Rema a dominarem o Most Requested Live!</p>
+                <h1 data-i18n="main-title">Mutirão <span>GOALS</span> 🌍</h1>
+                <p class="subtitle" data-i18n="subtitle">Ajude Anitta, Lisa e Rema a dominarem o Most Requested Live!</p>
 
                 <!-- Banner de Sucesso (Top 4) -->
                 <div class="success-banner">
-                    <h2 class="success-title">🎉 OBRIGADO, FÃS! TOP 4!</h2>
-                    <p class="success-text">
+                    <h2 class="success-title" data-i18n="success-title">🎉 OBRIGADO, FÃS! TOP 4!</h2>
+                    <p class="success-text" data-i18n="success-text">
                         Graças ao engajamento surreal de vocês, conseguimos uma subida fantástica! Rumo ao #1!
                     </p>
-                    <h3 style="font-size: 13px; color: #FFD700; text-transform: uppercase; margin-bottom: 10px; text-align: left; letter-spacing: 1px;">📈 Histórico de Ranking (MRL)</h3>
+                    <h3 style="font-size: 13px; color: #FFD700; text-transform: uppercase; margin-bottom: 10px; text-align: left; letter-spacing: 1px;" data-i18n="hist-title">📈 Histórico de Ranking (MRL)</h3>
                     <div class="history-table-wrapper">
                         <table class="history-table">
                             <thead>
-                                <tr><th>Período</th><th>Posição</th><th>Evolução</th><th>Status</th></tr>
+                                <tr><th data-i18n="th-period">Período</th><th data-i18n="th-pos">Posição</th><th data-i18n="th-evo">Evolução</th><th data-i18n="th-status">Status</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>Dia 1</td><td class="rank-number">#9</td><td class="evo-neu">—</td><td>Estreia nas 10+</td></tr>
-                                <tr><td>Dia 2</td><td class="rank-number">#5</td><td class="evo-up">+4</td><td>Crescimento!</td></tr>
-                                <tr class="highlight-row"><td>Dia 3</td><td class="rank-number rank-gold">#4</td><td class="evo-up">+1</td><td>Novo pico! 🔥</td></tr>
+                                <tr><td data-i18n="td-period1">Dia 1</td><td class="rank-number">#9</td><td class="evo-neu">—</td><td data-i18n="td-day1">Estreia nas 10+</td></tr>
+                                <tr><td data-i18n="td-period2">Dia 2</td><td class="rank-number">#5</td><td class="evo-up">+4</td><td data-i18n="td-day2">Crescimento!</td></tr>
+                                <tr class="highlight-row"><td data-i18n="td-period3">Dia 3</td><td class="rank-number rank-gold">#4</td><td class="evo-up">+1</td><td data-i18n="td-day3">Novo pico! 🔥</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -384,33 +403,34 @@
 
                 <!-- Contagem Regressiva -->
                 <div class="countdown-box" id="countdown-box">
-                    <span class="countdown-title" id="countdown-title">Início do próximo mutirão em:</span>
-                    <div class="countdown-timer" id="countdown-timer">Carregando...</div>
+                    <span class="countdown-title" id="countdown-title" data-i18n="countdown-prefix">Início do próximo mutirão em:</span>
+                    <div class="countdown-timer" id="countdown-timer" data-i18n="countdown-loading">Carregando...</div>
                 </div>
 
-                <span class="step-title">Passo 1: Copie a mensagem</span>
+                <span class="step-title" data-i18n="step1">Passo 1: Copie a mensagem</span>
                 <div class="request-box" id="texto-pedido">
-                    Hey @OnAirRomeo! We would love to hear 'GOALS' by Anitta, Lisa, and Rema on #MostRequestedLive tonight! Thank you! 🎵💖
+                    Hey @OnAirRomeo @MostRequestLive! We would love to hear #GOALS by Anitta, LISA, and Rema on #MostRequestedLive tonight! Thank you so much! 🎵💖
                 </div>
-                <button class="btn btn-copy" id="btnCopiar" onclick="copiarTexto()">📋 Copiar Texto do Pedido</button>
+                <button class="btn btn-copy" id="btnCopiar" onclick="copiarTexto()" data-i18n="btn-copy">📋 Copiar Texto do Pedido</button>
 
                 <hr style="border-color: rgba(255,255,255,0.1); margin: 25px 0;">
 
-                <span class="step-title">Passo 2: Envie nas redes do programa</span>
-                <a href="https://x.com/mostrequestlive/status/2063395732376199506?s=46" target="_blank" class="btn btn-x">🐦 Comentar no Twitter/X (Post Oficial)</a>
-                <a href="https://www.instagram.com/reel/DZQxmNmAc7Z/?igsh=N2x5YXFhbXN4NDRn" target="_blank" class="btn btn-instagram">📸 Comentar no Instagram (Reel Oficial)</a>
-                <a href="https://m.facebook.com/story.php?story_fbid=pfbid0XMvJAWkgqk1h2oKPpwGRyCTEbjQM9HnxJMiSTvpHQTNvKMQysRRNJM2Wikt1tP1Hl&id=100064539650326&mibextid=wwXIfr" target="_blank" class="btn btn-facebook">💙 Comentar no Facebook (Post Oficial)</a>
-                <a href="https://vt.tiktok.com/ZSQYMxtXd/" target="_blank" class="btn btn-tiktok">📱 Comentar no TikTok (Vídeo Oficial)</a>
-                <a href="https://youtube.com/shorts/_aSfn7YGgQY?si=r4MI8ZLawKHxfIWD" target="_blank" class="btn btn-youtube">📺 Comentar no YouTube (Short Oficial)</a>
-                <a href="sms:71021" class="btn btn-sms">💬 Enviar SMS (Apenas EUA)</a>
+                <span class="step-title" data-i18n="step2">Passo 2: Envie nas redes do programa</span>
+                
+                <a href="#" target="_blank" id="btn-twitter-auto" class="btn btn-x" onclick="registrarComentario(); setTimeout(window.atualizarLinkTwitter, 500);" data-i18n="btn-tw">🐦 Postar Tweet Automático (X)</a>
+                <a href="https://www.instagram.com/reel/DZQxmNmAc7Z/?igsh=N2x5YXFhbXN4NDRn" target="_blank" class="btn btn-instagram" data-i18n="btn-ig">📸 Comentar no Instagram (Reel Oficial)</a>
+                <a href="https://m.facebook.com/story.php?story_fbid=pfbid0XMvJAWkgqk1h2oKPpwGRyCTEbjQM9HnxJMiSTvpHQTNvKMQysRRNJM2Wikt1tP1Hl&id=100064539650326&mibextid=wwXIfr" target="_blank" class="btn btn-facebook" data-i18n="btn-fb">💙 Comentar no Facebook (Post Oficial)</a>
+                <a href="https://vt.tiktok.com/ZSQYMxtXd/" target="_blank" class="btn btn-tiktok" data-i18n="btn-tk">📱 Comentar no TikTok (Vídeo Oficial)</a>
+                <a href="https://youtube.com/shorts/_aSfn7YGgQY?si=r4MI8ZLawKHxfIWD" target="_blank" class="btn btn-youtube" data-i18n="btn-yt">📺 Comentar no YouTube (Short Oficial)</a>
+                <a href="sms:71021" class="btn btn-sms" data-i18n="btn-sms">💬 Enviar SMS (Apenas EUA)</a>
 
-                <!-- DICAS E PLAYER DO SPOTIFY (Recuperado) -->
+                <!-- DICAS E PLAYER DO SPOTIFY -->
                 <div class="stream-section">
-                    <span class="step-title" style="color: #1DB954; font-size: 16px;">🎧 Dê stream no Spotify</span>
+                    <span class="step-title" style="color: #1DB954; font-size: 16px;" data-i18n="step-spot">🎧 Dê stream no Spotify</span>
                     <div class="spotify-wrapper">
                         <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3hdGyxmW0eNskNwTwmXOIQ?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
-                    <div class="streaming-tips">
+                    <div class="streaming-tips" data-i18n="spot-tips">
                         <strong style="color: #1DB954;">⚠️ Como validar seu stream:</strong>
                         <ul>
                             <li><strong>Sem Loop:</strong> Não deixe a música repetindo.</li>
@@ -418,13 +438,23 @@
                             <li><strong>Não Mute:</strong> Abaixe o celular, mas não o app.</li>
                         </ul>
                     </div>
+                    
+                    <!-- PLAYLISTS -->
+                    <div class="playlist-box">
+                        <h4 style="color: #fff; margin-bottom: 8px; font-size: 15px;" data-i18n="pl-title">🔀 Playlists de Foco (Streams Filtrados)</h4>
+                        <p style="font-size: 13px; color: #ccc; margin-bottom: 15px; line-height: 1.4;" data-i18n="pl-desc">Dê play nas playlists abaixo! Elas intercalam "GOALS" com as faixas favoritas de cada artista, garantindo que o Spotify valide <strong>dezenas de streams limpos</strong> na sua conta.</p>
+                        
+                        <a href="https://open.spotify.com/playlist/5XIhNSsBzJDHetC5gJTuFo" target="_blank" class="btn btn-pl-anitta" data-i18n="pl-anitta">▶️ Playlist Foco: ANITTA</a>
+                        <a href="https://open.spotify.com/playlist/4qi9Wicy67RmAwBjUA85A4" target="_blank" class="btn btn-pl-lisa" data-i18n="pl-lisa">▶️ Playlist Foco: LISA</a>
+                        <a href="https://open.spotify.com/playlist/1FncglbrZOq1c3HbtyjX4h" target="_blank" class="btn btn-pl-rema" data-i18n="pl-rema">▶️ Playlist Foco: REMA</a>
+                    </div>
                 </div>
 
-                <!-- DICAS E LINK DO YOUTUBE (Recuperado) -->
+                <!-- DICAS E LINK DO YOUTUBE -->
                 <div class="stream-section">
-                    <span class="step-title" style="color: #FF0000; font-size: 16px;">🎬 Assista no YouTube</span>
-                    <a href="https://youtu.be/safzyuZNCGI?si=lxBbDeQtjbfCN-Kh" target="_blank" class="btn btn-youtube" style="margin-bottom: 15px;">▶️ Abrir Clipe Oficial</a>
-                    <div class="streaming-tips">
+                    <span class="step-title" style="color: #FF0000; font-size: 16px;" data-i18n="step-yt">🎬 Assista no YouTube</span>
+                    <a href="https://youtu.be/safzyuZNCGI?si=lxBbDeQtjbfCN-Kh" target="_blank" class="btn btn-youtube" style="margin-bottom: 15px;" data-i18n="btn-yt-clip">▶️ Abrir Clipe Oficial</a>
+                    <div class="streaming-tips" data-i18n="yt-tips">
                         <strong style="color: #FF0000;">⚠️ Regras de View:</strong>
                         <ul>
                             <li><strong>Intercale:</strong> Assista outros vídeos curtos entre as exibições.</li>
@@ -433,21 +463,21 @@
                     </div>
                 </div>
 
-                <!-- DESAFIO DE METAS E RANKING (Único no site) -->
+                <!-- DESAFIO DE METAS E RANKING -->
                 <div class="challenge-box">
-                    <span class="step-title" style="color: var(--accent); font-size: 18px;">🏆 Desafio: 10 Comentários</span>
-                    <p style="font-size: 13px; color: #ccc; margin-bottom: 15px;">A cada comentário feito nas redes sociais, clique no botão para registrar. A cada 10, você sobe no Ranking!</p>
+                    <span class="step-title" style="color: var(--accent); font-size: 18px;" data-i18n="chal-title">🏆 Desafio: 10 Comentários</span>
+                    <p style="font-size: 13px; color: #ccc; margin-bottom: 15px;" data-i18n="chal-desc">A cada comentário feito nas redes sociais, clique no botão para registrar. A cada 10, você sobe no Ranking!</p>
                     
-                    <button class="btn" style="background: #333; border: 1px solid #555; margin-bottom: 5px;" onclick="registrarComentario()">➕ Concluí mais 1 Comentário!</button>
+                    <button class="btn" style="background: #333; border: 1px solid #555; margin-bottom: 5px;" onclick="registrarComentario()" data-i18n="chal-btn">➕ Concluí mais 1 Comentário!</button>
                     
-                    <div style="font-weight: bold; margin-top: 10px; font-size: 15px;" id="contador-texto">Progresso: 0 / 10</div>
+                    <div style="font-weight: bold; margin-top: 10px; font-size: 15px;" id="contador-texto"><span data-i18n="prog-text">Progresso:</span> 0 / 10</div>
                     <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
                     
                     <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
                     
-                    <h3 style="font-size: 16px; margin-bottom: 10px; text-transform: uppercase;">👑 Top Fãs Mutirão GOALS</h3>
+                    <h3 style="font-size: 16px; margin-bottom: 10px; text-transform: uppercase;" data-i18n="rank-title">👑 Top Fãs Mutirão GOALS</h3>
                     <ul class="ranking-list" id="ranking-list">
-                        <li class="ranking-item" style="justify-content: center; color: #888;">Carregando ranking global...</li>
+                        <li class="ranking-item" style="justify-content: center; color: #888;" data-i18n="rank-load">Carregando ranking global...</li>
                     </ul>
                 </div>
 
@@ -456,20 +486,18 @@
             <!-- ================= ABA 2: SPOTIFY GLOBAL ================= -->
             <div id="tab-spotify" class="tab-content">
                 
-                <h2 class="goals-title-neon">GOALS NO TOP GLOBAL</h2>
-                <p class="subtitle" style="margin-bottom: 25px;">Acompanhe a nossa meta diária para colocar a música de volta no chart mundial do Spotify!</p>
+                <h2 class="goals-title-neon" data-i18n="glob-title">GOALS NO TOP GLOBAL</h2>
+                <p class="subtitle" style="margin-bottom: 25px;" data-i18n="glob-sub">Acompanhe a nossa meta diária para colocar a música de volta no chart mundial do Spotify!</p>
 
-                <!-- Player do Spotify duplicado para conveniência nesta aba -->
                 <div class="spotify-wrapper">
                     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3hdGyxmW0eNskNwTwmXOIQ?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
 
-                <!-- Tabela Kworb TRACKER REALISTA -->
                 <div class="kworb-wrapper">
                     <div class="kworb-header">
                         <div>
                             <strong style="color: #fff; font-size: 14px;">Spotify Global Daily</strong><br>
-                            <span style="color: #888; font-size: 11px;">Atualizado em: <span id="kworb-date">--/--/----</span></span>
+                            <span style="color: #888; font-size: 11px;"><span data-i18n="kworb-upd">Atualizado em:</span> <span id="kworb-date">--/--/----</span></span>
                         </div>
                         <div style="text-align: right;">
                             <span class="status-badge">STATUS: OUT</span>
@@ -481,31 +509,30 @@
                             <tr>
                                 <th>Pos</th>
                                 <th>P+</th>
-                                <th>Artista e Música</th>
-                                <th>Streams</th>
+                                <th data-i18n="kworb-th-art">Artista e Música</th>
+                                <th data-i18n="kworb-th-str">Streams</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr><td>1</td><td class="up">+2</td><td>Michael Jackson - Billie Jean</td><td>5,516,760</td></tr>
                             <tr><td>2</td><td class="neutral">=</td><td>Ariana Grande - hate that i made you love me</td><td>5,335,228</td></tr>
-                            <tr><td>3</td><td class="up">+1</td><td>Justin Bieber - Beauty And A Beat (w/ Nicki Minaj)</td><td>5,198,728</td></tr>
+                            <tr><td>3</td><td class="up">+1</td><td>Justin Bieber - Beauty And A Beat</td><td>5,198,728</td></tr>
                             <tr><td>...</td><td class="neutral"></td><td>...</td><td>...</td></tr>
-                            <tr><td>199</td><td class="down">-5</td><td>Kanye West - Flashing Lights (w/ Dwele)</td><td>1,222,978</td></tr>
-                            <tr><td>200</td><td class="neutral">RE</td><td>The Chainsmokers - Closer (w/ Halsey)</td><td>1,220,257</td></tr>
+                            <tr><td>199</td><td class="down">-5</td><td>Kanye West - Flashing Lights</td><td>1,222,978</td></tr>
+                            <tr><td>200</td><td class="neutral">RE</td><td>The Chainsmokers - Closer</td><td>1,220,257</td></tr>
                             
-                            <!-- Linha Destacada do TRACKER de GOALS (Mostrando que está OUT) -->
                             <tr class="goals-row">
                                 <td style="font-weight: bold;">OUT</td>
                                 <td class="neutral">—</td>
                                 <td><strong>Anitta, LISA, Rema - GOALS</strong></td>
-                                <td style="font-weight: bold; color: #ff3b30;">Meta: ~1.22M+</td>
+                                <td style="font-weight: bold; color: #ff3b30;" data-i18n="kworb-goal">Meta: ~1.22M+</td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div style="margin-top: 15px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center; border: 1px dashed #555;">
-                        <p style="font-size: 13px; color: #ddd; margin-bottom: 5px;">Precisamos fazer com que a música atinja cerca de <strong>1.220.257 streams</strong> diários limpos para ela conseguir entrar no Top 200 Global de novo.</p>
-                        <p style="font-size: 15px; font-weight: bold; color: #1DB954; margin-top: 10px;">Faltam +/- 1.22M streams! Dê play!</p>
+                        <p style="font-size: 13px; color: #ddd; margin-bottom: 5px;" data-i18n="kworb-f1">Precisamos fazer com que a música atinja cerca de <strong>1.220.257 streams</strong> diários limpos para ela conseguir entrar no Top 200 Global de novo.</p>
+                        <p style="font-size: 15px; font-weight: bold; color: #1DB954; margin-top: 10px;" data-i18n="kworb-f2">Faltam +/- 1.22M streams! Dê play!</p>
                     </div>
                 </div>
 
@@ -514,7 +541,6 @@
         </div>
     </div>
 
-    <!-- Textarea para cópia -->
     <textarea id="clipboard-temp" aria-hidden="true"></textarea>
 
     <!-- Scripts e Lógicas -->
@@ -522,6 +548,148 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- SISTEMA DE TRADUÇÃO ABSOLUTA (I18N) ---
+        const translations = {
+            pt: {
+                "main-title": "Mutirão <span>GOALS</span> 🌍",
+                "modal-title": "Atenção, Fã!",
+                "modal-text": "Assim que a contagem terminar, copie a mensagem e comente nos <strong>links oficiais</strong>!<br><br>Prepare-se para floodar e colocar GOALS no topo! 🚀",
+                "modal-btn": "ENTENDI, VAMOS LÁ!",
+                "tab-radio": "📻 Mutirão Rádio",
+                "tab-spotify": "🎧 Top 200 Global",
+                "subtitle": "Ajude Anitta, Lisa e Rema a dominarem o Most Requested Live!",
+                "success-title": "🎉 OBRIGADO, FÃS! TOP 4!",
+                "success-text": "Graças ao engajamento surreal de vocês, conseguimos uma subida fantástica! Rumo ao #1!",
+                "hist-title": "📈 Histórico de Ranking (MRL)",
+                "th-period": "Período", "th-pos": "Posição", "th-evo": "Evolução", "th-status": "Status",
+                "td-period1": "Dia 1", "td-period2": "Dia 2", "td-period3": "Dia 3",
+                "td-day1": "Estreia nas 10+", "td-day2": "Crescimento!", "td-day3": "Novo pico! 🔥",
+                "countdown-prefix": "Início do próximo mutirão em:",
+                "countdown-loading": "Carregando...",
+                "step1": "Passo 1: Copie a mensagem",
+                "btn-copy": "📋 Copiar Texto do Pedido",
+                "step2": "Passo 2: Envie nas redes do programa",
+                "btn-tw": "🐦 Postar Tweet Automático (X)",
+                "btn-ig": "📸 Comentar no Instagram (Reel Oficial)",
+                "btn-fb": "💙 Comentar no Facebook (Post Oficial)",
+                "btn-tk": "📱 Comentar no TikTok (Vídeo Oficial)",
+                "btn-yt": "📺 Comentar no YouTube (Short Oficial)",
+                "btn-sms": "💬 Enviar SMS (Apenas EUA)",
+                "step-spot": "🎧 Dê stream no Spotify",
+                "spot-tips": "<strong style='color: #1DB954;'>⚠️ Como validar seu stream:</strong><ul><li><strong>Sem Loop:</strong> Não deixe a música repetindo.</li><li><strong>Intercale:</strong> Ouça 2 a 3 músicas de outros antes de tocar de novo.</li><li><strong>Não Mute:</strong> Abaixe o celular, mas não o app.</li></ul>",
+                "pl-title": "🔀 Playlists de Foco (Streams Filtrados)",
+                "pl-desc": "Dê play nas playlists abaixo! Elas intercalam \"GOALS\" com as faixas favoritas de cada artista, garantindo que o Spotify valide <strong>dezenas de streams limpos</strong> na sua conta.",
+                "pl-anitta": "▶️ Playlist Foco: ANITTA",
+                "pl-lisa": "▶️ Playlist Foco: LISA",
+                "pl-rema": "▶️ Playlist Foco: REMA",
+                "step-yt": "🎬 Assista no YouTube",
+                "btn-yt-clip": "▶️ Abrir Clipe Oficial",
+                "yt-tips": "<strong style='color: #FF0000;'>⚠️ Regras de View:</strong><ul><li><strong>Intercale:</strong> Assista outros vídeos curtos entre as exibições.</li><li><strong>Sem Modo Anônimo:</strong> Esteja logado na sua conta normal.</li></ul>",
+                "chal-title": "🏆 Desafio: 10 Comentários",
+                "chal-desc": "A cada comentário feito nas redes sociais, clique no botão para registrar. A cada 10, você sobe no Ranking!",
+                "chal-btn": "➕ Concluí mais 1 Comentário!",
+                "prog-text": "Progresso:",
+                "rank-title": "👑 Top Fãs Mutirão GOALS",
+                "rank-load": "Carregando ranking global...",
+                "glob-title": "GOALS NO TOP GLOBAL",
+                "glob-sub": "Acompanhe a nossa meta diária para colocar a música de volta no chart mundial do Spotify!",
+                "kworb-upd": "Atualizado em:",
+                "kworb-th-art": "Artista e Música",
+                "kworb-th-str": "Streams",
+                "kworb-goal": "Meta: ~1.22M+",
+                "kworb-f1": "Precisamos fazer com que a música atinja cerca de <strong>1.220.257 streams</strong> diários limpos para ela conseguir entrar no Top 200 Global de novo.",
+                "kworb-f2": "Faltam +/- 1.22M streams! Dê play!",
+                "btn-copied": "✅ Copiado! (Texto Inédito)",
+                "btn-copy-new": "📋 Copiar Novo Texto (Anti-Spam)",
+                "prompt-msg": "🏆 VOCÊ BATEU A META DE 10 COMENTÁRIOS!\nQual o seu @ do Twitter, Instagram ou TikTok?\n(Insira apenas UM para entrar no Ranking!)",
+                "alert-success": "🎉 SUCESSO, {username}! Mais uma meta alcançada!",
+                "alert-copy-fail": "Por favor, copie o texto manualmente!",
+                "live-title": "🔥 O MUTIRÃO ESTÁ ROLANDO! 🔥",
+                "live-timer": "VÁ PEDIR AGORA!",
+                "anon": "Anônimo",
+                "rank-first": "Seja o 1º!"
+            },
+            en: {
+                "main-title": "Mass Voting <span>GOALS</span> 🌍",
+                "modal-title": "Attention, Fan!",
+                "modal-text": "Once the countdown ends, copy the message and comment on the <strong>official links</strong>!<br><br>Get ready to flood and put GOALS on top! 🚀",
+                "modal-btn": "GOT IT, LET'S GO!",
+                "tab-radio": "📻 Radio Voting",
+                "tab-spotify": "🎧 Top 200 Global",
+                "subtitle": "Help Anitta, Lisa, and Rema dominate Most Requested Live!",
+                "success-title": "🎉 THANK YOU, FANS! TOP 4!",
+                "success-text": "Thanks to your surreal engagement, we achieved a fantastic climb! Road to #1!",
+                "hist-title": "📈 Ranking History (MRL)",
+                "th-period": "Period", "th-pos": "Position", "th-evo": "Evolution", "th-status": "Status",
+                "td-period1": "Day 1", "td-period2": "Day 2", "td-period3": "Day 3",
+                "td-day1": "Debut in Top 10+", "td-day2": "Fast growth!", "td-day3": "New peak! 🔥",
+                "countdown-prefix": "Next mass voting starts in:",
+                "countdown-loading": "Loading...",
+                "step1": "Step 1: Copy the message",
+                "btn-copy": "📋 Copy Request Text",
+                "step2": "Step 2: Send on official channels",
+                "btn-tw": "🐦 Auto-Post Tweet (X)",
+                "btn-ig": "📸 Comment on Instagram (Official Reel)",
+                "btn-fb": "💙 Comment on Facebook (Official Post)",
+                "btn-tk": "📱 Comment on TikTok (Official Video)",
+                "btn-yt": "📺 Comment on YouTube (Official Short)",
+                "btn-sms": "💬 Send SMS (US Only)",
+                "step-spot": "🎧 Stream on Spotify",
+                "spot-tips": "<strong style='color: #1DB954;'>⚠️ Stream Rules:</strong><ul><li><strong>No Loop:</strong> Do not loop the song.</li><li><strong>Interleave:</strong> Play 2-3 other songs in between.</li><li><strong>Don't Mute:</strong> Lower the device volume, not the app.</li></ul>",
+                "pl-title": "🔀 Focus Playlists (Filtered Streams)",
+                "pl-desc": "Play the playlists below! They mix 'GOALS' with the artists' favorite tracks, ensuring Spotify validates <strong>dozens of clean streams</strong> from your account.",
+                "pl-anitta": "▶️ Focus Playlist: ANITTA",
+                "pl-lisa": "▶️ Focus Playlist: LISA",
+                "pl-rema": "▶️ Focus Playlist: REMA",
+                "step-yt": "🎬 Watch on YouTube",
+                "btn-yt-clip": "▶️ Open Official Video",
+                "yt-tips": "<strong style='color: #FF0000;'>⚠️ View Rules:</strong><ul><li><strong>Interleave:</strong> Watch other short videos between views.</li><li><strong>No Incognito:</strong> Stay logged into your normal account.</li></ul>",
+                "chal-title": "🏆 Challenge: 10 Comments",
+                "chal-desc": "For every comment you make on social media, click the button to track. Reach 10 to climb the Leaderboard!",
+                "chal-btn": "➕ I completed 1 more Comment!",
+                "prog-text": "Progress:",
+                "rank-title": "👑 Top Fans GOALS Voting",
+                "rank-load": "Loading global ranking...",
+                "glob-title": "GOALS ON GLOBAL TOP",
+                "glob-sub": "Track our daily goal to bring the song back to the Spotify Global Chart!",
+                "kworb-upd": "Updated at:",
+                "kworb-th-art": "Artist and Song",
+                "kworb-th-str": "Streams",
+                "kworb-goal": "Goal: ~1.22M+",
+                "kworb-f1": "We need the song to reach about <strong>1,220,257 clean daily streams</strong> to re-enter the Global Top 200.",
+                "kworb-f2": "We are +/- 1.22M streams away! Hit play!",
+                "btn-copied": "✅ Copied! (New Text)",
+                "btn-copy-new": "📋 Copy New Text (Anti-Spam)",
+                "prompt-msg": "🏆 YOU REACHED THE 10 COMMENTS GOAL!\nWhat is your Twitter, Instagram or TikTok @?\n(Insert only ONE to join the Leaderboard!)",
+                "alert-success": "🎉 SUCCESS, {username}! Another goal reached!",
+                "alert-copy-fail": "Please copy the text manually!",
+                "live-title": "🔥 VOTING IS LIVE! 🔥",
+                "live-timer": "REQUEST NOW!",
+                "anon": "Anonymous",
+                "rank-first": "Be the first!"
+            }
+        };
+
+        let currentLang = 'pt';
+        window.mudarIdioma = function(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+            
+            // Troca os textos em todos os elementos mapeados com data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+
+            // Atualiza a barra de progresso
+            document.getElementById('contador-texto').innerHTML = `<span data-i18n="prog-text">${translations[lang]['prog-text']}</span> ${comentariosFeitos} / 10`;
+            
+            // Força a atualização do ranking para traduzir textos dinâmicos do JS
+            const rankingList = JSON.parse(localStorage.getItem('mrl_ranking') || '[]');
+            if(rankingList.length > 0) renderizarRanking(rankingList);
+        };
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'mutirao-goals';
         let app, auth, db, currentUser = null;
@@ -540,14 +708,24 @@
         let userName = localStorage.getItem('mrl_username') || "";
         const emojisList = ['✨', '🔥', '💖', '🚀', '👑', '🌟', '🎧', '💃', '💫', '🎶', '📻', '🌎'];
 
-        window.copiarTexto = function() {
+        function gerarTextoAntiSpam() {
+            const frases = [
+                "Hey @OnAirRomeo @MostRequestLive! We would love to hear #GOALS by Anitta, LISA, and Rema on #MostRequestedLive tonight! Thank you so much!",
+                "Please play #GOALS by Anitta, LISA, and Rema on #MostRequestedLive tonight! @OnAirRomeo @MostRequestLive We really appreciate it!",
+                "We are requesting #GOALS by Anitta, LISA & Rema on #MostRequestedLive! It's a hit! @OnAirRomeo @MostRequestLive Thanks a lot!",
+                "@OnAirRomeo @MostRequestLive Can you play #GOALS by Anitta, LISA and Rema tonight on #MostRequestedLive? Thank you very much!",
+                "Turn it up! Playing #GOALS by Anitta, LISA, and Rema on #MostRequestedLive would be amazing! @OnAirRomeo @MostRequestLive Much appreciated!"
+            ];
+            const baseText = frases[Math.floor(Math.random() * frases.length)];
             let randomEmojis = "";
-            const numEmojis = Math.floor(Math.random() * 2) + 3; 
+            const numEmojis = Math.floor(Math.random() * 2) + 2; 
             for(let i=0; i<numEmojis; i++) randomEmojis += emojisList[Math.floor(Math.random() * emojisList.length)];
             const uniqueHash = Math.random().toString(36).substring(2, 6);
-            
-            const textoAntiSpam = `Hey @OnAirRomeo! We would love to hear 'GOALS' by Anitta, Lisa, and Rema on #MostRequestedLive tonight! Thank you! ${randomEmojis} [${uniqueHash}]`;
-            
+            return `${baseText} ${randomEmojis} [${uniqueHash}]`;
+        }
+
+        window.copiarTexto = function() {
+            const textoAntiSpam = gerarTextoAntiSpam();
             document.getElementById('texto-pedido').innerText = textoAntiSpam;
             const textAreaTemp = document.getElementById('clipboard-temp');
             textAreaTemp.value = textoAntiSpam;
@@ -556,17 +734,26 @@
             try {
                 document.execCommand('copy');
                 const btn = document.getElementById('btnCopiar');
-                btn.innerHTML = "✅ Copiado! (Texto Inédito)"; btn.classList.add('copied');
-                setTimeout(() => { btn.innerHTML = "📋 Copiar Novo Texto (Anti-Spam)"; btn.classList.remove('copied'); }, 3000);
-            } catch (err) { alert('Copie o texto manualmente!'); }
+                btn.innerHTML = translations[currentLang]["btn-copied"]; btn.classList.add('copied');
+                setTimeout(() => { btn.innerHTML = translations[currentLang]["btn-copy-new"]; btn.classList.remove('copied'); }, 3000);
+            } catch (err) { alert(translations[currentLang]["alert-copy-fail"]); }
             window.getSelection().removeAllRanges();
+        };
+
+        window.atualizarLinkTwitter = function() {
+            const btn = document.getElementById('btn-twitter-auto');
+            if(btn) {
+                const textoParaTweet = gerarTextoAntiSpam();
+                const urlEncodedText = encodeURIComponent(textoParaTweet);
+                btn.href = `https://twitter.com/intent/tweet?text=${urlEncodedText}`;
+            }
         };
 
         window.registrarComentario = function() {
             if (comentariosFeitos < 10) {
                 comentariosFeitos++;
                 const contador = document.getElementById('contador-texto');
-                contador.innerText = `Progresso: ${comentariosFeitos} / 10`;
+                contador.innerHTML = `<span data-i18n="prog-text">${translations[currentLang]['prog-text']}</span> ${comentariosFeitos} / 10`;
                 contador.classList.remove('pop-anim'); void contador.offsetWidth; contador.classList.add('pop-anim');
                 document.getElementById('progress-fill').style.width = `${(comentariosFeitos / 10) * 100}%`;
                 if (comentariosFeitos === 10) setTimeout(() => { window.cumprirDesafio(); }, 400); 
@@ -587,9 +774,9 @@
 
         window.cumprirDesafio = async function() {
             if (!userName) {
-                userName = prompt("🏆 VOCÊ BATEU A META DE 10 COMENTÁRIOS!\nQual o seu @ do Twitter, Instagram ou TikTok?\n(Insira apenas UM para entrar no Ranking!)");
+                userName = prompt(translations[currentLang]['prompt-msg']);
                 if (!userName) {
-                    comentariosFeitos = 9; document.getElementById('contador-texto').innerText = `Progresso: 9 / 10`;
+                    comentariosFeitos = 9; document.getElementById('contador-texto').innerHTML = `<span data-i18n="prog-text">${translations[currentLang]['prog-text']}</span> 9 / 10`;
                     document.getElementById('progress-fill').style.width = `90%`; return; 
                 }
                 localStorage.setItem('mrl_username', userName);
@@ -606,8 +793,9 @@
             } else { salvarRankingLocal(userName); }
 
             setTimeout(() => {
-                alert(`🎉 SUCESSO, ${userName}! Mais uma meta alcançada!`);
-                comentariosFeitos = 0; document.getElementById('contador-texto').innerText = `Progresso: 0 / 10`;
+                const msg = translations[currentLang]['alert-success'].replace('{username}', userName);
+                alert(msg);
+                comentariosFeitos = 0; document.getElementById('contador-texto').innerHTML = `<span data-i18n="prog-text">${translations[currentLang]['prog-text']}</span> 0 / 10`;
                 document.getElementById('progress-fill').style.width = `0%`;
             }, 600);
         };
@@ -623,10 +811,14 @@
 
         function renderizarRanking(users) {
             const listHtml = document.getElementById('ranking-list'); listHtml.innerHTML = '';
-            if (users.length === 0) return listHtml.innerHTML = '<li class="ranking-item" style="justify-content: center; color: #888;">Seja o 1º!</li>';
+            if (users.length === 0) {
+                return listHtml.innerHTML = `<li class="ranking-item" style="justify-content: center; color: #888;">${translations[currentLang]['rank-first']}</li>`;
+            }
             users.slice(0, 20).forEach((u, index) => {
                 let rank = index + 1; let prefix = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `<span>${rank}º</span>`;
-                listHtml.innerHTML += `<li class="ranking-item"><div style="display:flex; align-items:center; gap: 8px;">${prefix} <span>${u.username || 'Anônimo'}</span></div><span class="meta-badge">${u.challengesCompleted} Metas</span></li>`;
+                const metasText = currentLang === 'en' ? 'Goals' : 'Metas';
+                const displayName = u.username || translations[currentLang]['anon'];
+                listHtml.innerHTML += `<li class="ranking-item"><div style="display:flex; align-items:center; gap: 8px;">${prefix} <span>${displayName}</span></div><span class="meta-badge">${u.challengesCompleted} ${metasText}</span></li>`;
             });
         }
 
@@ -643,19 +835,24 @@
 
         window.onload = function() {
             document.getElementById('welcomeModal').classList.add('show');
+            if(typeof window.atualizarLinkTwitter === 'function') window.atualizarLinkTwitter();
             
-            // Lógica Atualização de Data Kworb (Mostra data do dia anterior por padrão de charts)
             const dateObj = new Date();
             dateObj.setDate(dateObj.getDate() - 1);
-            document.getElementById('kworb-date').innerText = dateObj.toLocaleDateString('pt-BR');
+            document.getElementById('kworb-date').innerText = dateObj.toLocaleDateString(navigator.language || 'en-US');
 
-            // Lógica Contagem Regressiva
             function atualizarContador() {
                 const agoraBRT = new Date(new Date().getTime() + (new Date().getTimezoneOffset() * 60000) + (3600000 * -3));
                 const diaDaSemana = agoraBRT.getDay(), hora = agoraBRT.getHours();
                 const box = document.getElementById('countdown-box'), title = document.getElementById('countdown-title'), timer = document.getElementById('countdown-timer');
-                if (diaDaSemana === 6 && hora >= 19 && hora < 24) { box.classList.add('active'); title.innerText = "🔥 O MUTIRÃO ESTÁ ROLANDO! 🔥"; timer.innerText = "VÁ PEDIR AGORA!"; return; }
-                box.classList.remove('active'); title.innerText = "Início do próximo mutirão em (BRT):";
+                if (diaDaSemana === 6 && hora >= 19 && hora < 24) { 
+                    box.classList.add('active'); 
+                    title.innerText = translations[currentLang]['live-title']; 
+                    timer.innerText = translations[currentLang]['live-timer']; 
+                    return; 
+                }
+                box.classList.remove('active'); 
+                title.innerText = translations[currentLang]['countdown-prefix'];
                 let diasParaSabado = (6 - diaDaSemana + 7) % 7; if (diaDaSemana === 6 && hora < 19) diasParaSabado = 0;
                 let alvoBRT = new Date(agoraBRT); alvoBRT.setDate(alvoBRT.getDate() + diasParaSabado); alvoBRT.setHours(19, 0, 0, 0);
                 const diffTempo = alvoBRT - agoraBRT;
@@ -664,7 +861,6 @@
             }
             atualizarContador(); setInterval(atualizarContador, 1000);
 
-            // Inicialização do Ranking
             if (!hasFirebase) {
                 let ranking = JSON.parse(localStorage.getItem('mrl_ranking') || '[{"username":"@anittafan_br","challengesCompleted":5},{"username":"@lisamc_ofc","challengesCompleted":3}]');
                 localStorage.setItem('mrl_ranking', JSON.stringify(ranking)); renderizarRanking(ranking); return;
